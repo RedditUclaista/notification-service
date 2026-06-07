@@ -9,8 +9,11 @@ services:
       - ${APP_PORT}:10001
     environment:
       - DB_HOST=db
+      - DB_PORT=5432
       - CACHE_HOST=cache
+      - CACHE_PORT=6379
       - QUEUE_HOST=queue
+      - QUEUE_PORT=5672
     depends_on:
       db:
         condition: service_healthy
@@ -58,9 +61,7 @@ services:
     image: cloudamqp/lavinmq:latest
     restart: unless-stopped
     environment:
-      - LAVINMQ_DEFAULT_USER=${QUEUE_USER}
-      - LAVINMQ_DEFAULT_PASS=${QUEUE_PASSWORD}
-      - LAVINMQ_DEFAULT_VHOST=${QUEUE_VHOST}
+      - LAVINMQ_DEFAULT_USER_ONLY_LOOPBACK=false
     ports:
       - ${QUEUE_PORT}:5672
       - 15673:15672 # HTTP Management Console
