@@ -1,0 +1,15 @@
+meta {
+  name: Get Notifications
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:10001/api/v1/notifications?limit=10&offset=0
+  body: none
+  auth: none
+}
+
+headers {
+  X-User-Id: 8f3b2a1c-4d5e-6f7g-8h9i-0j1k2l3m4n5o
+}

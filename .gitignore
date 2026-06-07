@@ -1,0 +1,39 @@
+# Binaries
+main
+main.exe
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+vendor/
+
+# Configuration and Sensitive Data
+.env
+.env.local
+.env.development
+.env.test
+service-account.json
+firebase-key.json
+
+# Development tools
+.tmp/
+tmp/
+bin/
+dist/
+out/

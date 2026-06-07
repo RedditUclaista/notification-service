@@ -1,0 +1,79 @@
+services:
+  app:
+    container_name: ${PROJECT_NAME}_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - ${APP_PORT}:10001
+    environment:
+      - DB_HOST=db
+      - CACHE_HOST=cache
+      - QUEUE_HOST=queue
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_started
+      queue:
+        condition: service_started
+    networks:
+      - notification_network
+
+  db:
+    container_name: ${PROJECT_NAME}_db
+    image: postgres:18.3
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_USER=${DB_USER}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - db:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    ports:
+      - ${DB_PORT}:5432
+    networks:
+      - notification_network
+
+  cache:
+    container_name: ${PROJECT_NAME}_cache
+    image: valkey/valkey:8.0
+    restart: unless-stopped
+    ports:
+      - ${CACHE_PORT}:6379
+    volumes:
+      - cache_data:/data
+    networks:
+      - notification_network
+
+  queue:
+    container_name: ${PROJECT_NAME}_queue
+    image: cloudamqp/lavinmq:latest
+    restart: unless-stopped
+    environment:
+      - LAVINMQ_DEFAULT_USER=${QUEUE_USER}
+      - LAVINMQ_DEFAULT_PASS=${QUEUE_PASSWORD}
+      - LAVINMQ_DEFAULT_VHOST=${QUEUE_VHOST}
+    ports:
+      - ${QUEUE_PORT}:5672
+      - 15673:15672 # HTTP Management Console
+    volumes:
+      - queue_data:/var/lib/lavinmq
+    networks:
+      - notification_network
+
+networks:
+  notification_network:
+    driver: bridge
+
+volumes:
+  db:
+  cache_data:
+  queue_data:

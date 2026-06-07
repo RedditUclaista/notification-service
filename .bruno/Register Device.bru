@@ -1,0 +1,19 @@
+meta {
+  name: Register Device
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:10001/api/v1/notifications/devices
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_id": "8f3b2a1c-4d5e-6f7g-8h9i-0j1k2l3m4n5o",
+    "fcm_token": "fcm_raw_token_string_from_firebase_flutter_client",
+    "platform": "android"
+  }
+}
