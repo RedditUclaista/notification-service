@@ -8,7 +8,11 @@ type Meta struct {
 	Offset int `json:"offset"`
 }
 
+type NotificationData struct {
+	Notifications []entities.Notification `json:"notifications"`
+}
+
 type NotificationHistoryResponse struct {
-	Data []entities.Notification `json:"data"`
-	Meta Meta                  `json:"meta"`
+	Data NotificationData `json:"data"`
+	Meta Meta             `json:"meta"`
 }

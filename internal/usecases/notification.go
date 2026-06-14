@@ -28,7 +28,9 @@ func (uc *notificationUseCase) GetNotifications(ctx context.Context, userID stri
 	}
 
 	return &dto.NotificationHistoryResponse{
-		Data: notifications,
+		Data: dto.NotificationData{
+			Notifications: notifications,
+		},
 		Meta: dto.Meta{
 			Total:  total,
 			Limit:  limit,
