@@ -15,6 +15,7 @@ import (
 	"github.com/RedditUclaista/notification-service/internal/usecases"
 	dotenv "github.com/joho/godotenv"
 	"github.com/labstack/echo/v5"
+	"github.com/labstack/echo/v5/middleware"
 )
 
 func main() {
@@ -157,6 +158,9 @@ func main() {
 
 	// 6. Configuración y Arranque de la API HTTP con Echo v5
 	app := echo.New()
+	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+	}))
 
 	notificationHandler := deliveryhttp.NewNotificationHandler(useCase)
 	deliveryhttp.SetupRoutes(app, notificationHandler)

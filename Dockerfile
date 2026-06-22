@@ -25,6 +25,7 @@ WORKDIR /root/
 COPY --from=builder /app/notification-service .
 COPY .env .
 COPY sql/init.sql ./sql/init.sql
+COPY service-account.json* ./
 EXPOSE 10001
 
 CMD ["./notification-service"]
